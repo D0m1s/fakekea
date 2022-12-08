@@ -1,0 +1,8 @@
+      <div class="preview" data-target="">
+          <i class="fas fa-times"></i>
+          <img src=""/>
+          <h3></h3>
+          <p></p>
+          
+          <div class="price"> €</div>
+        </div>

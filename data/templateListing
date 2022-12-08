@@ -1,0 +1,23 @@
+      <div class="prod">
+        <a class="list">
+          <div class="product" data-name="">
+            <div class="item-img-wrap">
+              <div class="img-link">
+                <img src="">
+              </div>
+            </div>
+            <div class="title"><span></span></div>
+            <div class="middle">
+              <span></span>
+            </div>
+            <div class="description">
+              <div class="text">
+                
+              </div>
+            </div>
+            <div class="bottom">
+              <div class="price"><span> €</span></div>
+            </div>
+          </div>
+        </a>
+      </div>
