@@ -25,9 +25,9 @@ int main()
 	for(;;) {
 		printf("Welcome to the product modifier! Enter the index of the product you'd like to modify:\n");
 		if(scanf("%d", &index)==1&&getchar()=='\n') {
-			if(index>=count) {
+			if(index>count) {
 				printf("You've entered a number higher than the product count! Try again.\n");
-			} else if(index<0) {
+			} else if(index<=0) {
 				printf("You can't modify a product that doesn't exist!\n");
 			} else {
 				break;
