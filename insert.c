@@ -55,9 +55,9 @@ void insert() {
                 ;
         }
     }
-
-    char *tableLeft[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-    char *tableRight[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    char empty[1] = "";
+    char *tableLeft[10] = {empty, empty, empty, empty, empty, empty, empty, empty, empty, empty};
+    char *tableRight[10] = {empty, empty, empty, empty, empty, empty, empty, empty, empty, empty};
 
     for (int i = 0; i < tableCount; i++) {
         printf("Enter value for tableLeft[%d]: ", i);
