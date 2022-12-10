@@ -1,15 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "functions.h"
 #include "sqlite\sqlite3.h"
 
-void finish_read();
-
-int main() {
+void insert() {
     sqlite3 *db;
     sqlite3_open("data/db.db", &db);
 
-    // Prompt the user for the values to be inserted into the database
     printf("Enter image URL: ");
     char img[100];
     scanf("%100[^\n]", img);
@@ -57,11 +54,10 @@ int main() {
                 ;
         }
     }
-    // Initialize the tableLeft and tableRight arrays with NULL values
+
     char *tableLeft[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char *tableRight[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
-    // Prompt the user for the values in the tableLeft and tableRight arrays
     for (int i = 0; i < tableCount; i++) {
         printf("Enter value for tableLeft[%d]: ", i);
         char value1[100];
@@ -76,7 +72,6 @@ int main() {
         tableRight[i] = value2;
     }
 
-    // Construct the query using the values entered by the user
     char *query;
     query = malloc(10000);
     sprintf(query, "insert into product values('%s', '%s', '%s', '%s', '%lf', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
@@ -84,14 +79,12 @@ int main() {
             tableLeft[2], tableRight[2], tableLeft[3], tableRight[3], tableLeft[4], tableRight[4], tableLeft[5], tableRight[5],
             tableLeft[6], tableRight[6], tableLeft[7], tableRight[7], tableLeft[8], tableRight[8], tableLeft[9], tableRight[9]);
 
-    // Execute the query
     if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
         printf("Error\n");
     } else {
         printf("Success\n");
     }
 
-    // Clean up
     free(query);
     sqlite3_close(db);
 }

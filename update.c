@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "sqlite\sqlite3.h"
+#include "functions.h"
 
-int returnFileSize(FILE *file);
-void expand(char **html, int size, int length, int offset, char *toAdd);
-
-int main()
+void update()
 {
 	sqlite3 *db;
 	sqlite3_open("data/db.db", &db);
@@ -123,7 +121,7 @@ int main()
 	free(templateHTML);
 	fclose(file);
 	sqlite3_close(db);
-	return 0;
+
 }
 
 int returnFileSize(FILE *file){

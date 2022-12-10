@@ -1,21 +1,10 @@
 #include <conio.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "functions.h"
 #include "sqlite\sqlite3.h"
 
-void print_list();
-void finish_read();
-void change_url(sqlite3 *db, int index);
-void change_title(sqlite3 *db, int index);
-void change_tag(sqlite3 *db, int index);
-void change_description(sqlite3 *db, int index);
-void change_price(sqlite3 *db, int index);
-void change_table(sqlite3 *db, int index);
-void change_tables(sqlite3 *db, int index);
-void change_row(sqlite3 *db, int index);
-
-int main() {
+void modify() {
     sqlite3 *db;
     sqlite3_open("data/db.db", &db);
 
@@ -77,7 +66,7 @@ int main() {
                     break;
                 case '0':
                     sqlite3_close(db);
-                    return 0;
+                    
             }
         }
     }
@@ -108,13 +97,6 @@ void change_url(sqlite3 *db, int index) {
     }
     finish_read();
     free(query);
-}
-
-void finish_read() {
-    if (getchar() != '\n') {
-        while (getchar() != '\n')
-            ;
-    }
 }
 
 void change_title(sqlite3 *db, int index) {

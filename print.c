@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "sqlite\sqlite3.h"
+#include "functions.h"
 
-int main()
+void print()
 {
 	sqlite3 *db;
 	sqlite3_open("data/db.db", &db);

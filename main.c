@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <conio.h>
+#include "functions.h"
 
 void print_menu();
 
@@ -11,8 +12,10 @@ int main() {
             action = getch();
             switch(action) {
                 case '1':
+                    insert();
                     break;
                 case '2':
+                    delete();
                     break;
                 case '3':
                     break;
