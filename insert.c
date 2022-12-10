@@ -9,22 +9,22 @@ void insert() {
     sqlite3_open("data/db.db", &db);
 
     printf("Enter image URL: ");
-    char img[100];
+    char *img = calloc(101, 1);
     scanf("%100[^\n]", img);
     finish_read();
 
     printf("Enter title: ");
-    char title[100];
+    char *title = calloc(101, 1);
     scanf("%100[^\n]", title);
     finish_read();
 
     printf("Enter tag: ");
-    char tag[100];
+    char *tag = calloc(101, 1);
     scanf("%100[^\n]", tag);
     finish_read();
 
     printf("Enter description: ");
-    char description[100];
+    char *description = calloc(101, 1);
     scanf("%100[^\n]", description);
     finish_read();
 
@@ -55,22 +55,20 @@ void insert() {
                 ;
         }
     }
-    char empty[1] = "";
-    char *tableLeft[10] = {empty, empty, empty, empty, empty, empty, empty, empty, empty, empty};
-    char *tableRight[10] = {empty, empty, empty, empty, empty, empty, empty, empty, empty, empty};
+
+    char *tableLeft[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    char *tableRight[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     for (int i = 0; i < tableCount; i++) {
         printf("Enter value for tableLeft[%d]: ", i);
-        char value1[100];
-        scanf("%100[^\n]", value1);
+        tableLeft[i] = calloc(101, 1);
+        scanf("%100[^\n]", tableLeft[i]);
         finish_read();
-        tableLeft[i] = value1;
 
         printf("Enter value for tableRight[%d]: ", i);
-        char value2[100];
-        scanf("%100[^\n]", value2);
+        tableRight[i] = calloc(101, 1);
+        scanf("%100[^\n]", tableRight[i]);
         finish_read();
-        tableRight[i] = value2;
     }
 
     char *query;
@@ -86,6 +84,14 @@ void insert() {
         printf("Success\n");
     }
 
+    free(img);
+    free(title);
+    free(tag);
+    free(description);
+    for(int i = 0; i < tableCount; ++i){
+        free(tableLeft[i]);
+        free(tableRight[i]);
+    }
     free(query);
     sqlite3_close(db);
     return;
