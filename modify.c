@@ -1,6 +1,7 @@
 #include <conio.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "functions.h"
 #include "sqlite\sqlite3.h"
 
@@ -66,7 +67,7 @@ void modify() {
                     break;
                 case '0':
                     sqlite3_close(db);
-                    
+                    return;
             }
         }
     }
@@ -81,7 +82,7 @@ void print_list() {
         "4 - Description\n"
         "5 - Price\n"
         "6 - Table\n"
-        "0 - Exit Program\n");
+        "0 - Go back\n");
 }
 
 void change_url(sqlite3 *db, int index) {

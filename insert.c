@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "functions.h"
 #include "sqlite\sqlite3.h"
 
@@ -28,29 +29,29 @@ void insert() {
     finish_read();
 
     double price;
-    for(;;) {
+    for (;;) {
         printf("Enter price: ");
-        if(scanf("%lf", &price)==1&&getchar()=='\n') {
+        if (scanf("%lf", &price) == 1 && getchar() == '\n') {
             break;
         } else {
             printf("Invalid input.\n");
-            while(getchar()!='\n')
+            while (getchar() != '\n')
                 ;
         }
     }
 
     int tableCount;
-    for(;;) {
+    for (;;) {
         printf("Enter table count: ");
-        if(scanf("%d", &tableCount)==1&&getchar()=='\n') {
-            if(tableCount>10) {
+        if (scanf("%d", &tableCount) == 1 && getchar() == '\n') {
+            if (tableCount > 10) {
                 printf("Table count can be no more than 10!\n");
             } else {
-            break;
+                break;
             }
         } else {
             printf("Invalid input.\n");
-            while(getchar()!='\n')
+            while (getchar() != '\n')
                 ;
         }
     }
@@ -87,11 +88,11 @@ void insert() {
 
     free(query);
     sqlite3_close(db);
+    return;
 }
 
 void finish_read() {
-    if (getchar() != '\n')
-    {
+    if (getchar() != '\n') {
         while (getchar() != '\n')
             ;
     }
