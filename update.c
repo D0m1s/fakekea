@@ -4,31 +4,20 @@
 #include "sqlite\sqlite3.h"
 
 int returnFileSize(FILE *file);
-int callback(void *NotUsed, int argc, char **argv, char **azColName);
 void expand(char **html, int size, int length, int offset, char *toAdd);
-void freeAll();
-
-struct Product{
-	char *id;
-	char *img;
-	char *title;
-	char *tag;
-	char *description;
-	char *price;
-	int tableCount;
-	char *tableLeft[10];
-	char *tableRight[10];
-} product[100];
-
-int productNum = 0;
 
 int main()
 {
 	sqlite3 *db;
 	sqlite3_open("data/db.db", &db);
-	sqlite3_exec(db, "select * from product", callback, NULL, NULL);
-	sqlite3_close(db);
+	sqlite3_stmt *stmt;
+    int rc = sqlite3_prepare_v2(db, "select img, title, tag, description, price, tableCount, left1, right1, left2, right2, left3, right3, left4, right4, left5, right5, left6, right6, left7, right7, left8, right8, left9, right9, left10, right10 from product", -1, &stmt, NULL);
 
+	sqlite3_stmt *stmt2;
+	int rc2 = sqlite3_prepare_v2(db, "select count(*) from product", -1, &stmt2, NULL);
+	rc2 = sqlite3_step(stmt2);
+	int count = sqlite3_column_int(stmt2, 0);
+	
 	int offset = 915;
 
 	FILE *file; 
@@ -45,23 +34,27 @@ int main()
 	fclose(file);
 
 	int offsets[6] = {92,198,278,345,455,572};
-	for(int i = 0; i < productNum; ++i){
+	for(int i = 0; i < count; ++i){
+		sqlite3_step(stmt);
 		int addedSize = 0;
 		char *productHTML = calloc(templateSize+1, 1);
 		strcpy(productHTML, template);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].id), offsets[0]+addedSize, product[i].id);
-		addedSize = strlen(product[i].id);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].img), offsets[1]+addedSize, product[i].img);
-		addedSize += strlen(product[i].img);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].title), offsets[2]+addedSize, product[i].title);
-		addedSize += strlen(product[i].title);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].tag), offsets[3]+addedSize, product[i].tag);
-		addedSize += strlen(product[i].tag);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].description), offsets[4]+addedSize, product[i].description);
-		addedSize += strlen(product[i].description);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].price), offsets[5]+addedSize, product[i].price);
+		char id[15];
+		sprintf(id, "%d", i);
+		expand(&productHTML, strlen(productHTML)+1, strlen(id), offsets[0]+addedSize, id);
+		addedSize = strlen(id);
+		expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 0)), offsets[1]+addedSize, (char *)sqlite3_column_text(stmt, 0));
+		addedSize += strlen(sqlite3_column_text(stmt, 0));
+		expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 1)), offsets[2]+addedSize, (char *)sqlite3_column_text(stmt, 1));
+		addedSize += strlen(sqlite3_column_text(stmt, 1));
+		expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 2)), offsets[3]+addedSize, (char *)sqlite3_column_text(stmt, 2));
+		addedSize += strlen(sqlite3_column_text(stmt, 2));
+		expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 3)), offsets[4]+addedSize, (char *)sqlite3_column_text(stmt, 3));
+		addedSize += strlen(sqlite3_column_text(stmt, 3));
+		expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 4)), offsets[5]+addedSize, (char *)sqlite3_column_text(stmt, 4));
 		expand(&templateHTML, strlen(templateHTML)+1, strlen(productHTML), offset, productHTML);
 		offset += strlen(productHTML);
+
 		free(productHTML);
 	}
 	free(template);
@@ -73,23 +66,27 @@ int main()
 	offset += 53;
 	int offsets2[5] = {40, 102, 120, 139, 184};
 
-	for(int i = 0; i < productNum; ++i){
+	rc = sqlite3_prepare_v2(db, "select img, title, tag, description, price, tableCount, left1, right1, left2, right2, left3, right3, left4, right4, left5, right5, left6, right6, left7, right7, left8, right8, left9, right9, left10, right10 from product", -1, &stmt, NULL);
+	for(int i = 0; i < count; ++i){
+		sqlite3_step(stmt);
 		int addedSize = 0;
 		char *productHTML =  calloc(templateSize+1, 1);
 		strcpy(productHTML, template);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].id), offsets2[0]+addedSize, product[i].id);
-		addedSize = strlen(product[i].id);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].img), offsets2[1]+addedSize, product[i].img);
-		addedSize += strlen(product[i].img);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].title), offsets2[2]+addedSize, product[i].title);
-		addedSize += strlen(product[i].title);
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].description), offsets2[3]+addedSize, product[i].description);
-		addedSize += strlen(product[i].description);
-		if(product[i].tableCount != 0){
+		char id[15];
+		sprintf(id, "%d", i);
+		expand(&productHTML, strlen(productHTML)+1, strlen(id), offsets2[0]+addedSize, id);
+		addedSize = strlen(id);
+		expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 0)), offsets2[1]+addedSize, (char *)sqlite3_column_text(stmt, 0));
+		addedSize += strlen(sqlite3_column_text(stmt, 0));
+		expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 1)), offsets2[2]+addedSize, (char *)sqlite3_column_text(stmt, 1));
+		addedSize += strlen(sqlite3_column_text(stmt, 1));
+		expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 3)), offsets2[3]+addedSize, (char *)sqlite3_column_text(stmt, 3));
+		addedSize += strlen(sqlite3_column_text(stmt, 3));
+		if(sqlite3_column_int(stmt, 5) != 0){
 			char tableBegin[8] = "<table>";
 			expand(&productHTML, strlen(productHTML)+1, 7, offsets2[3]+addedSize+5, tableBegin);
 			addedSize += 7;
-			for(int j = 0; j < product[i].tableCount; ++j){
+			for(int j = 0; j < sqlite3_column_int(stmt, 5); ++j){
 				char table[5] = "<tr>";
 				char table1[5] = "<td>";
 				char table2[6] = "</td>";
@@ -98,14 +95,14 @@ int main()
 				addedSize += 4;
 				expand(&productHTML, strlen(productHTML)+1, 4, offsets2[3]+addedSize+5, table1);
 				addedSize += 4;
-				expand(&productHTML, strlen(productHTML)+1, strlen(product[i].tableLeft[j]), offsets2[3]+addedSize+5, product[i].tableLeft[j]);
-				addedSize += strlen(product[i].tableLeft[j]);
+				expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 6+j*2)), offsets2[3]+addedSize+5, (char *)sqlite3_column_text(stmt, 6+j*2));
+				addedSize += strlen(sqlite3_column_text(stmt, 6+j*2));
 				expand(&productHTML, strlen(productHTML)+1, 5, offsets2[3]+addedSize+5, table2);
 				addedSize += 5;
 				expand(&productHTML, strlen(productHTML)+1, 4, offsets2[3]+addedSize+5, table1);
 				addedSize += 4;
-				expand(&productHTML, strlen(productHTML)+1, strlen(product[i].tableRight[j]), offsets2[3]+addedSize+5, product[i].tableRight[j]);
-				addedSize += strlen(product[i].tableRight[j]);
+				expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 7+j*2)), offsets2[3]+addedSize+5, (char *)sqlite3_column_text(stmt, 7+j*2));
+				addedSize += strlen(sqlite3_column_text(stmt, 7+j*2));
 				expand(&productHTML, strlen(productHTML)+1, 5, offsets2[3]+addedSize+5, table2);
 				addedSize += 5;
 				expand(&productHTML, strlen(productHTML)+1, 5, offsets2[3]+addedSize+5, table3);
@@ -115,7 +112,7 @@ int main()
 			expand(&productHTML, strlen(productHTML)+1, 8, offsets2[3]+addedSize+5, tableEnd);
 			addedSize += 8;
 		}
-		expand(&productHTML, strlen(productHTML)+1, strlen(product[i].price), offsets2[4]+addedSize, product[i].price);
+		expand(&productHTML, strlen(productHTML)+1, strlen(sqlite3_column_text(stmt, 4)), offsets2[4]+addedSize, (char *)sqlite3_column_text(stmt, 4));
 		expand(&templateHTML, strlen(templateHTML)+1, strlen(productHTML), offset, productHTML);
 		offset += strlen(productHTML);
 		free(productHTML);
@@ -124,9 +121,8 @@ int main()
 	file = fopen("web/index.html", "w");
 	fprintf(file, "%s", templateHTML);
 	free(templateHTML);
-	freeAll();
 	fclose(file);
-
+	sqlite3_close(db);
 	return 0;
 }
 
@@ -136,37 +132,7 @@ int returnFileSize(FILE *file){
   fseek(file, 0, SEEK_SET);
   return fileSize;
 }
-int callback(void *NotUsed, int argc, char **argv, char **azColName) {
-	NotUsed = 0;
-	char id[15];
-	sprintf(id, "%d", productNum);
-	product[productNum].id = calloc(strlen(id)+1, 1);
-	strcpy(product[productNum].id, id);
-	
-	product[productNum].img = calloc(strlen(argv[0])+1, 1);
-	strcpy(product[productNum].img, argv[0]);
-	product[productNum].title = calloc(strlen(argv[1])+1, 1);
-	strcpy(product[productNum].title, argv[1]);
-	product[productNum].tag = calloc(strlen(argv[2])+1, 1);
-	strcpy(product[productNum].tag, argv[2]);
-	product[productNum].description = calloc(strlen(argv[3])+1, 1);
-	strcpy(product[productNum].description, argv[3]);
-	product[productNum].price = calloc(strlen(argv[4])+1, 1);
-	strcpy(product[productNum].price, argv[4]);
-	
-	sscanf(argv[5], "%d", &product[productNum].tableCount);
 
-	for(int i = 0; i < product[productNum].tableCount; ++i){
-		product[productNum].tableLeft[i] = calloc(strlen(argv[6+2*i])+1, 1);
-		strcpy(product[productNum].tableLeft[i], argv[6+2*i]);
-		product[productNum].tableRight[i] = calloc(strlen(argv[7+2*i])+1, 1);
-		strcpy(product[productNum].tableRight[i], argv[7+2*i]);
-	}
-
-	++productNum;
-
-	return 0;
-}
 void expand(char **html, int size, int length, int offset, char *toAdd){
 	char *newString = calloc(size+length, 1);
 	strncpy(newString, *html, offset);
@@ -175,18 +141,4 @@ void expand(char **html, int size, int length, int offset, char *toAdd){
 	strcat(newString, *html+offset);
 	free(*html);
 	*html = newString;
-}
-void freeAll(){
-	for(int i = 0; i < productNum; ++i){
-		free(product[i].id);
-		free(product[i].img);
-		free(product[i].title);
-		free(product[i].tag);
-		free(product[i].description);
-		free(product[i].price);
-		for(int j = 0; j < product[i].tableCount; ++j){
-			free(product[i].tableLeft[j]);
-			free(product[i].tableRight[j]);
-		}
-	}
 }
