@@ -1,6 +1,7 @@
 #include <conio.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "functions.h"
 
@@ -49,8 +50,8 @@ int main() {
                     print_menu();
                     break;
                 case '8':
-                    updateWebsite();
                     system("cls");
+                    updateWebsite();
                     print_menu();
                     break;
                 case '0':
@@ -84,5 +85,20 @@ void updateWebsite() {
     FILE *fp = fopen("update.bat", "w");
     fprintf(fp, "%s", text);
     fclose(fp);
-    system("update.bat");
+    system("update.bat>validate.txt");
+
+    FILE *fp2 = fopen("validate.txt", "r");
+    char *text2 = malloc(returnFileSize(fp2));
+
+    fread(text2, returnFileSize(fp2), 1, fp2);
+    if (strstr(text2, "Login authentication failed") != NULL) {
+        printf("Invalid password entered.\n\n");
+    } else {
+        printf("Website updated successfully.\n\n");
+    }
+
+    fclose(fp2);
+    remove("validate.txt");
+
+    return;
 }
