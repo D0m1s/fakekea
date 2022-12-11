@@ -21,7 +21,7 @@ WIP project
 How to use:
 1) Download all the files <br>
 1.5) In order to compile&run the C files, use this command:<br>
-    gcc -o filename.exe filename.c sqlite/sqlite3.o
+    gcc main.c insert.c delete.c modify.c print.c update.c sqlite/sqlite3.o -o program.exe
 2) Afterwards, run the program from the commandline. Use the commandprompts as seen in the console to navigate and use the program.
 
 WIP:<br>
