@@ -24,8 +24,8 @@ void insert() {
     finish_read();
 
     printf("Enter description: ");
-    char *description = calloc(101, 1);
-    scanf("%100[^\n]", description);
+    char *description = calloc(1025, 1);
+    scanf("%1024[^\n]", description);
     finish_read();
 
     double price;
@@ -72,7 +72,7 @@ void insert() {
     }
 
     char *query;
-    query = malloc(10000);
+    query = malloc(100000);
     sprintf(query, "insert into product values('%s', '%s', '%s', '%s', '%lf', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
             img, title, tag, description, price, tableCount, tableLeft[0], tableRight[0], tableLeft[1], tableRight[1],
             tableLeft[2], tableRight[2], tableLeft[3], tableRight[3], tableLeft[4], tableRight[4], tableLeft[5], tableRight[5],
@@ -88,7 +88,7 @@ void insert() {
     free(title);
     free(tag);
     free(description);
-    for(int i = 0; i < tableCount; ++i){
+    for (int i = 0; i < tableCount; ++i) {
         free(tableLeft[i]);
         free(tableRight[i]);
     }

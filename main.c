@@ -1,10 +1,13 @@
 #include <conio.h>
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "functions.h"
 
 void print_menu();
 
 int main() {
+    system("cls");
     print_menu();
     char action;
     for (;;) {
@@ -12,18 +15,23 @@ int main() {
             action = getch();
             switch (action) {
                 case '1':
+                    system("cls");
                     insert();
                     print_menu();
                     break;
                 case '2':
+                    system("cls");
                     delete ();
                     print_menu();
                     break;
                 case '3':
+                    system("cls");
                     modify();
+                    system("cls");
                     print_menu();
                     break;
                 case '4':
+                    system("cls");
                     update();
                     print_menu();
                     break;

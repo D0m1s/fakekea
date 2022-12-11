@@ -16,7 +16,7 @@ void modify() {
     sqlite3_step(stmt);
     int count = sqlite3_column_int(stmt, 0);
     sqlite3_finalize(stmt);
-    
+
     char *query = malloc(1000);
 
     for (;;) {
@@ -133,10 +133,10 @@ void change_tag(sqlite3 *db, int index) {
 }
 
 void change_description(sqlite3 *db, int index) {
-    char *query = malloc(1000);
+    char *query = malloc(10000);
     printf("Enter new description: ");
-    char description[100];
-    scanf("%100[^\n]", description);
+    char *description = calloc(1025, 1);
+    scanf("%1024[^\n]", description);
     sprintf(query, "update product set description = '%s' where rowid = %d;", description, index);
     if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
         printf("Error\n");
@@ -144,6 +144,7 @@ void change_description(sqlite3 *db, int index) {
         printf("Success\n");
     }
     finish_read();
+    free(description);
     free(query);
 }
 
@@ -170,7 +171,6 @@ void change_price(sqlite3 *db, int index) {
 }
 
 void change_table(sqlite3 *db, int index) {
-    char *query = malloc(1000);
     printf(
         "What do you want to modify about the table?\n"
         "1 - Amount of rows\n"
@@ -182,7 +182,7 @@ void change_table(sqlite3 *db, int index) {
             command = getch();
             switch (command) {
                 case '1':
-                    change_table(db, index);
+                    change_tables(db, index);
                     printf(
                         "What do you want to modify about the table?\n"
                         "1 - Amount of rows\n"
@@ -198,7 +198,6 @@ void change_table(sqlite3 *db, int index) {
                         "0 - Go back\n");
                     break;
                 case '0':
-                    free(query);
                     return;
             }
         }

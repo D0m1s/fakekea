@@ -65,7 +65,7 @@ void update() {
     fclose(file);
     offset += 53;
     int offsets2[5] = {40, 102, 120, 139, 184};
-    
+
     sqlite3_stmt *stmt3;
     sqlite3_prepare_v2(db, "select img, title, tag, description, price, tableCount, left1, right1, left2, right2, left3, right3, left4, right4, left5, right5, left6, right6, left7, right7, left8, right8, left9, right9, left10, right10 from product", -1, &stmt3, NULL);
     for (int i = 0; i < count; ++i) {
@@ -125,6 +125,9 @@ void update() {
     free(templateHTML);
     fclose(file);
     sqlite3_close(db);
+
+    printf("Website updated succesfully!\n\n");
+
     return;
 }
 

@@ -5,6 +5,8 @@
 #include "sqlite\sqlite3.h"
 
 void print() {
+    system("cls");
+    printf("Item list:\n");
     sqlite3 *db;
     sqlite3_open("data/db.db", &db);
 
@@ -15,6 +17,8 @@ void print() {
         printf("%d. %s\n", i + 1, sqlite3_column_text(stmt, 1));
         ++i;
     }
+
+    printf("\n");
 
     sqlite3_finalize(stmt);
     sqlite3_close(db);
