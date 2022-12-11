@@ -15,11 +15,12 @@ void modify() {
     sqlite3_prepare_v2(db, "select count(*) from product;", -1, &stmt, NULL);
     sqlite3_step(stmt);
     int count = sqlite3_column_int(stmt, 0);
+    sqlite3_finalize(stmt);
     if (count == 0) {
         printf("There are no item listings! Can't modify anything!\n\n");
+        sqlite3_close(db);
         return;
     }
-    sqlite3_finalize(stmt);
 
     char *query = malloc(1000);
 
