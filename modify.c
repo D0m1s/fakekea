@@ -1,6 +1,8 @@
 #include <conio.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "functions.h"
 #include "sqlite\sqlite3.h"
@@ -46,6 +48,7 @@ void modify() {
         }
     }
 
+    system("cls");
     printf("Product chosen!\n");
     print_list();
     char command;
@@ -74,6 +77,7 @@ void modify() {
                     print_list();
                     break;
                 case '6':
+                    system("cls");
                     change_table(db, index);
                     print_list();
                     break;
@@ -105,8 +109,10 @@ void change_url(sqlite3 *db, int index) {
     scanf("%100[^\n]", img);
     sprintf(query, "update product set img = '%s' where rowid = %d;", img, index);
     if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
+        system("cls");
         printf("Error\n");
     } else {
+        system("cls");
         printf("Success\n");
     }
     finish_read();
@@ -120,8 +126,10 @@ void change_title(sqlite3 *db, int index) {
     scanf("%100[^\n]", title);
     sprintf(query, "update product set title = '%s' where rowid = %d;", title, index);
     if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
+        system("cls");
         printf("Error\n");
     } else {
+        system("cls");
         printf("Success\n");
     }
     finish_read();
@@ -135,8 +143,10 @@ void change_tag(sqlite3 *db, int index) {
     scanf("%100[^\n]", tag);
     sprintf(query, "update product set tag = '%s' where rowid = %d;", tag, index);
     if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
+        system("cls");
         printf("Error\n");
     } else {
+        system("cls");
         printf("Success\n");
     }
     finish_read();
@@ -150,8 +160,10 @@ void change_description(sqlite3 *db, int index) {
     scanf("%1024[^\n]", description);
     sprintf(query, "update product set description = '%s' where rowid = %d;", description, index);
     if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
+        system("cls");
         printf("Error\n");
     } else {
+        system("cls");
         printf("Success\n");
     }
     finish_read();
@@ -165,14 +177,22 @@ void change_price(sqlite3 *db, int index) {
     for (;;) {
         printf("Enter price: ");
         if (scanf("%lf", &price) == 1 && getchar() == '\n') {
-            sprintf(query, "update product set price = '%lf' where rowid = %d;", price, index);
-            if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
-                printf("Error\n");
+            if (price < 0) {
+                printf("Can't have a negative price!\n");
             } else {
-                printf("Success\n");
+                price = roundf(price * 100) / 100;
+                sprintf(query, "update product set price = '%.2lf' where rowid = %d;", price, index);
+                if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
+                    system("cls");
+                    printf("Error\n");
+                } else {
+                    system("cls");
+                    printf("Success\n");
+                }
+                free(query);
+                break;
             }
-            free(query);
-            break;
+
         } else {
             printf("Invalid input.\n");
             while (getchar() != '\n')
@@ -184,8 +204,9 @@ void change_price(sqlite3 *db, int index) {
 void change_table(sqlite3 *db, int index) {
     printf(
         "What do you want to modify about the table?\n"
-        "1 - Amount of rows\n"
+        "1 - Delete row\n"
         "2 - Information in rows\n"
+        "3 - Insert new row\n"
         "0 - Go back\n");
     char command;
     for (;;) {
@@ -193,98 +214,37 @@ void change_table(sqlite3 *db, int index) {
             command = getch();
             switch (command) {
                 case '1':
-                    change_tables(db, index);
+                    delete_row(db, index);
                     printf(
                         "What do you want to modify about the table?\n"
-                        "1 - Amount of rows\n"
+                        "1 - Delete row\n"
                         "2 - Information in rows\n"
+                        "3 - Insert new row\n"
                         "0 - Go back\n");
                     break;
                 case '2':
-                    change_row(db, index);
                     printf(
                         "What do you want to modify about the table?\n"
-                        "1 - Amount of rows\n"
-                        "2 - Information in a row\n"
+                        "1 - Delete row\n"
+                        "2 - Information in rows\n"
+                        "3 - Insert new row\n"
+                        "0 - Go back\n");
+                    break;
+                case '3':
+                    insert_row(db, index);
+                    printf(
+                        "What do you want to modify about the table?\n"
+                        "1 - Delete row\n"
+                        "2 - Information in rows\n"
+                        "3 - Insert new row\n"
                         "0 - Go back\n");
                     break;
                 case '0':
+                    system("cls");
                     return;
             }
         }
     }
-}
-
-void change_tables(sqlite3 *db, int index) {
-    sqlite3_stmt *stmt;
-    char *query = malloc(1000);
-    sprintf(query, "select tableCount from product where rowid = %d;", index);
-    sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
-    sqlite3_step(stmt);
-    int table_count = sqlite3_column_int(stmt, 0);
-    sqlite3_finalize(stmt);
-    // printf("%d\n", sqlite3_column_int(stmt, 0));
-    int new_amount;
-    for (;;) {
-        printf("Enter new amount of rows:\n");
-        if (scanf("%d", &new_amount) == 1 && getchar() == '\n') {
-            if (new_amount < 0) {
-                printf("Can't have less than 0 rows!\n");
-            } else if (new_amount > 10) {
-                printf("Can't have more than 10 rows!\n");
-            } else {
-                break;
-            }
-        } else {
-            printf("Invalid input!\n");
-            while (getchar() != '\n')
-                ;
-        }
-    }
-
-    if (new_amount < table_count) {
-        sprintf(query, "update product set tableCount = '%d' where rowid = %d;", new_amount, index);
-        if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
-            printf("Error\n");
-        } else {
-            printf("Success\n");
-        }
-    } else {
-        sprintf(query, "update product set tableCount = '%d' where rowid = %d;", new_amount, index);
-        if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
-            printf("Error\n");
-        } else {
-            printf("Success\n");
-        }
-        char *tableLeft[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-        char *tableRight[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-
-        /*This loop reads new row values from console*/
-
-        for (int i = table_count; i < new_amount; i++) {
-            printf("Enter value for tableLeft[%d]: ", i);
-            char value1[100];
-            scanf("%100[^\n]", value1);
-            finish_read();
-            tableLeft[i] = value1;
-
-            printf("Enter value for tableRight[%d]: ", i);
-            char value2[100];
-            scanf("%100[^\n]", value2);
-            finish_read();
-            tableRight[i] = value2;
-        }
-
-        /*This loop updates the database with the new row values*/
-        for (int i = table_count; i < new_amount; i++) {
-            sprintf(query, "update product set left%d = '%s' where rowid = %d;", i + 1, tableLeft[i], index);
-            sqlite3_exec(db, query, NULL, NULL, NULL);
-            sprintf(query, "update product set right%d = '%s' where rowid = %d;", i + 1, tableRight[i], index);
-            sqlite3_exec(db, query, NULL, NULL, NULL);
-        }
-    }
-    free(query);
-    return;
 }
 
 void change_row(sqlite3 *db, int index) {
@@ -295,12 +255,24 @@ void change_row(sqlite3 *db, int index) {
     sqlite3_step(stmt);
     int table_count = sqlite3_column_int(stmt, 0);
     sqlite3_finalize(stmt);
+    if (table_count == 0) {
+        system("cls");
+        printf("Can't edit information in rows, since there are 0 rows!\n");
+        free(query);
+        return;
+    }
     int modify_row;
 
     for (;;) {
-        printf("Enter which row to modify: ");
+        printf("Enter which row to modify (enter -1 if you want to go back): ");
         if (scanf("%d", &modify_row) == 1 && getchar() == '\n') {
-            if (modify_row <= 0 || modify_row >= table_count) {
+            if (modify_row == -1) {
+                system("cls");
+                printf("Cancelling row modification.\n");
+                free(query);
+                return;
+            }
+            if (modify_row <= 0 || modify_row > table_count) {
                 printf("Invalid row chosen.\n");
             } else {
                 printf("Enter value for the left side of the %d row: ", modify_row);
@@ -326,6 +298,105 @@ void change_row(sqlite3 *db, int index) {
                 ;
         }
     }
+    system("cls");
+    printf("Success.\n");
+    free(query);
+    return;
+}
+
+void insert_row(sqlite3 *db, int index) {
+    sqlite3_stmt *stmt;
+    char *query = malloc(1000);
+    sprintf(query, "select tableCount from product where rowid = %d;", index);
+    sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
+    sqlite3_step(stmt);
+    int table_count = sqlite3_column_int(stmt, 0);
+    sqlite3_finalize(stmt);
+    if (table_count == 10) {
+        system("cls");
+        printf("Can't insert new row, since there are already 10 rows!\n");
+        free(query);
+        return;
+    }
+    table_count++;
+    sprintf(query, "update product set tableCount = '%d' where rowid = %d;", table_count, index);
+    sqlite3_exec(db, query, NULL, NULL, NULL);
+
+    printf("Enter value for the left side of the %d row (enter -1 if you want to go back):", table_count);
+    char value1[100];
+    scanf("%100[^\n]", value1);
+    finish_read();
+    char verification[3] = "-1";
+    if (strcmp(value1, verification) == 0) {
+        system("cls");
+        printf("Cancelling row insertion.\n");
+        free(query);
+        return;
+    }
+
+    printf("Enter value for the right side of the %d row: : ", table_count);
+    char value2[100];
+    scanf("%100[^\n]", value2);
+    finish_read();
+
+    sprintf(query, "update product set left%d = '%s' where rowid = %d;", table_count, value1, index);
+    sqlite3_exec(db, query, NULL, NULL, NULL);
+    sprintf(query, "update product set right%d = '%s' where rowid = %d;", table_count, value2, index);
+    sqlite3_exec(db, query, NULL, NULL, NULL);
+
+    system("cls");
+    printf("Success.\n");
+    free(query);
+    return;
+}
+
+void delete_row(sqlite3 *db, int index) {
+    sqlite3_stmt *stmt;
+    char *query = malloc(1000);
+    sprintf(query, "select tableCount from product where rowid = %d;", index);
+    sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
+    sqlite3_step(stmt);
+    int table_count = sqlite3_column_int(stmt, 0);
+    sqlite3_finalize(stmt);
+    if (table_count == 0) {
+        system("cls");
+        printf("Can't delete any row, since there are 0 rows!\n");
+        free(query);
+        return;
+    }
+    int delete_row;
+
+    printf("Enter which row you want to delete: (enter -1 if you want to go back): ");
+    for (;;) {
+        if (scanf("%d", &delete_row) == 1 && getchar() == '\n') {
+            if (delete_row == -1) {
+                system("cls");
+                printf("Cancelling row deletion.\n");
+                free(query);
+                return;
+            } else if (delete_row > table_count) {
+                printf("Invalid row chosen.\n");
+            } else {
+                break;
+            }
+        } else {
+            printf("Invalid input format.\n");
+            while (getchar() != '\n')
+                ;
+        }
+    }
+    char val[100];
+    for (int i = delete_row; i < table_count; ++i) {
+        sprintf(query, "REPLACE INTO products (left%d) SELECT left%d FROM products WHERE rowid = %d", i, i + 1, index);
+        sqlite3_exec(db, query, NULL, NULL, NULL);
+        sprintf(query, "REPLACE INTO products (right%d) SELECT right%d FROM products WHERE rowid = %d", i, i + 1, index);
+        sqlite3_exec(db, query, NULL, NULL, NULL);
+    }
+
+    sprintf(query, "update product set tableCount = '%d' where rowid = %d;", table_count - 1, index);
+    sqlite3_exec(db, query, NULL, NULL, NULL);
+
+    system("cls");
     printf("Success.\n");
     free(query);
     return;

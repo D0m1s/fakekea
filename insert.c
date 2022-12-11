@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,7 +40,12 @@ void insert() {
     for (;;) {
         printf("Enter price: ");
         if (scanf("%lf", &price) == 1 && getchar() == '\n') {
-            break;
+            if (price < 0) {
+                printf("Can't have a negative price!\n");
+            } else {
+                price = roundf(price * 100) / 100;
+                break;
+            }
         } else {
             printf("Invalid input.\n");
             while (getchar() != '\n')
@@ -67,12 +73,12 @@ void insert() {
     char *tableRight[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     for (int i = 0; i < tableCount; i++) {
-        printf("Enter value for tableLeft[%d]: ", i);
+        printf("enter value for the left side of the %d row: ", i);
         tableLeft[i] = calloc(101, 1);
         scanf("%100[^\n]", tableLeft[i]);
         finish_read();
 
-        printf("Enter value for tableRight[%d]: ", i);
+        printf("Enter value for the right side of the %d row: ", i);
         tableRight[i] = calloc(101, 1);
         scanf("%100[^\n]", tableRight[i]);
         finish_read();
@@ -80,7 +86,7 @@ void insert() {
 
     char *query;
     query = malloc(100000);
-    sprintf(query, "insert into product values('%s', '%s', '%s', '%s', '%lf', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+    sprintf(query, "insert into product values('%s', '%s', '%s', '%s', '%.2lf', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
             img, title, tag, description, price, tableCount, tableLeft[0], tableRight[0], tableLeft[1], tableRight[1],
             tableLeft[2], tableRight[2], tableLeft[3], tableRight[3], tableLeft[4], tableRight[4], tableLeft[5], tableRight[5],
             tableLeft[6], tableRight[6], tableLeft[7], tableRight[7], tableLeft[8], tableRight[8], tableLeft[9], tableRight[9]);
