@@ -48,6 +48,11 @@ int main() {
                     system("cls");
                     print_menu();
                     break;
+                case '8':
+                    updateWebsite();
+                    system("cls");
+                    print_menu();
+                    break;
                 case '0':
                     return 0;
             }
@@ -65,5 +70,19 @@ void print_menu() {
         "5 - Print items\n"
         "6 - Open the local website\n"
         "7 - Open fakekea.ml\n"
+        "8 - Update fakekea.ml\n"
         "0 - Exit program\n");
+}
+
+void updateWebsite() {
+    printf("Enter password: ");
+    char password[100];
+    scanf("%100[^\n]", password);
+    finish_read();
+    char text[1000];
+    sprintf(text, "@echo off\necho open ftpupload.net> temp.txt\necho ezyro_32945929>> temp.txt\necho %s>> temp.txt\necho cd fakekea.ml>> temp.txt\necho cd htdocs>> temp.txt\necho send web/index.html>> temp.txt\necho quit>> temp.txt\nftp -s:temp.txt\ndel temp.txt", password);
+    FILE *fp = fopen("update.bat", "w");
+    fprintf(fp, "%s", text);
+    fclose(fp);
+    system("update.bat");
 }

@@ -22,5 +22,6 @@ void modify();
 void delete();
 void finish_read();
 void insert();
+void updateWebsite();
 
 #endif
