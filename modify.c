@@ -25,8 +25,13 @@ void modify() {
     char *query = malloc(1000);
 
     for (;;) {
-        printf("Welcome to the product modifier! Enter the index of the product you'd like to modify:\n");
+        printf("Welcome to the product modifier! Enter the index of the product you'd like to modify (enter -1 if you'd like to go back): ");
         if (scanf("%d", &index) == 1 && getchar() == '\n') {
+            if (index == -1) {
+                printf("Cancelling modification.\n\n");
+                sqlite3_close(db);
+                return;
+            }
             if (index > count) {
                 printf("You've entered a number higher than the product count! Try again.\n");
             } else if (index <= 0) {

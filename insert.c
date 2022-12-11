@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "functions.h"
 #include "sqlite\sqlite3.h"
@@ -8,10 +9,16 @@ void insert() {
     sqlite3 *db;
     sqlite3_open("data/db.db", &db);
 
-    printf("Enter image URL: ");
+    printf("Enter image URL (or enter -1 if you want to go back): ");
     char *img = calloc(101, 1);
     scanf("%100[^\n]", img);
+    char validate[3] = "-1";
     finish_read();
+    if (strcmp(img, validate) == 0) {
+        printf("Cancelling insertion.\n\n");
+        sqlite3_close(db);
+        return;
+    }
 
     printf("Enter title: ");
     char *title = calloc(101, 1);
