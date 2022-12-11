@@ -105,7 +105,7 @@ void print_list() {
 void change_url(sqlite3 *db, int index) {
     char *query = malloc(1000);
     printf("Enter new image URL: ");
-    char img[100];
+    char img[101];
     scanf("%100[^\n]", img);
     sprintf(query, "update product set img = '%s' where rowid = %d;", img, index);
     if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
@@ -122,7 +122,7 @@ void change_url(sqlite3 *db, int index) {
 void change_title(sqlite3 *db, int index) {
     char *query = malloc(1000);
     printf("Enter new title: ");
-    char title[100];
+    char title[101];
     scanf("%100[^\n]", title);
     sprintf(query, "update product set title = '%s' where rowid = %d;", title, index);
     if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
@@ -139,7 +139,7 @@ void change_title(sqlite3 *db, int index) {
 void change_tag(sqlite3 *db, int index) {
     char *query = malloc(1000);
     printf("Enter new tag: ");
-    char tag[100];
+    char tag[101];
     scanf("%100[^\n]", tag);
     sprintf(query, "update product set tag = '%s' where rowid = %d;", tag, index);
     if (sqlite3_exec(db, query, NULL, NULL, NULL)) {
@@ -324,7 +324,7 @@ void insert_row(sqlite3 *db, int index) {
     sqlite3_exec(db, query, NULL, NULL, NULL);
 
     printf("Enter value for the left side of the %d row (enter -1 if you want to go back):", table_count);
-    char value1[100];
+    char value1[101];
     scanf("%100[^\n]", value1);
     finish_read();
     char verification[3] = "-1";
@@ -336,7 +336,7 @@ void insert_row(sqlite3 *db, int index) {
     }
 
     printf("Enter value for the right side of the %d row: : ", table_count);
-    char value2[100];
+    char value2[101];
     scanf("%100[^\n]", value2);
     finish_read();
 
@@ -386,7 +386,7 @@ void delete_row(sqlite3 *db, int index) {
                 ;
         }
     }
-    char val[100];
+    char val[101];
     for (int i = delete_row; i < table_count; ++i) {
         sprintf(query, "REPLACE INTO products (left%d) SELECT left%d FROM products WHERE rowid = %d", i, i + 1, index);
         sqlite3_exec(db, query, NULL, NULL, NULL);
