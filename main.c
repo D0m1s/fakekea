@@ -88,7 +88,7 @@ void updateWebsite() {
     system("update.bat>validate.txt");
 
     FILE *fp2 = fopen("validate.txt", "r");
-    char *text2 = malloc(returnFileSize(fp2));
+    char *text2 = malloc((returnFileSize(fp2) + 1));
 
     fread(text2, returnFileSize(fp2), 1, fp2);
     if (strstr(text2, "Login authentication failed") != NULL) {
@@ -99,6 +99,7 @@ void updateWebsite() {
 
     fclose(fp2);
     remove("validate.txt");
+    free(text2);
 
     return;
 }
