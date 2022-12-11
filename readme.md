@@ -28,6 +28,5 @@ How to use:
 2.3) After, use insert.c, modify.c and delete.c to modify data to your liking.<br>
 
 WIP:<br>
-- Interactive user interface to access everything in one program (main.c)
 - Connect program with update.bat to update the website in real-time, not just a local copy
 - & other things
