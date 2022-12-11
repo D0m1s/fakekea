@@ -223,6 +223,7 @@ void change_table(sqlite3 *db, int index) {
                         "0 - Go back\n");
                     break;
                 case '2':
+                    change_row(db, index);
                     printf(
                         "What do you want to modify about the table?\n"
                         "1 - Delete row\n"
