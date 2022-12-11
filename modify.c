@@ -15,6 +15,10 @@ void modify() {
     sqlite3_prepare_v2(db, "select count(*) from product;", -1, &stmt, NULL);
     sqlite3_step(stmt);
     int count = sqlite3_column_int(stmt, 0);
+    if (count == 0) {
+        printf("There are no item listings! Can't modify anything!\n\n");
+        return;
+    }
     sqlite3_finalize(stmt);
 
     char *query = malloc(1000);
@@ -69,6 +73,7 @@ void modify() {
                     break;
                 case '0':
                     sqlite3_close(db);
+                    system("cls");
                     return;
             }
         }

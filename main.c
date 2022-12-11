@@ -27,7 +27,6 @@ int main() {
                 case '3':
                     system("cls");
                     modify();
-                    system("cls");
                     print_menu();
                     break;
                 case '4':
