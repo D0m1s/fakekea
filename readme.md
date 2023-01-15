@@ -26,5 +26,5 @@ How to use:
 
 2023-01-15 update:
 - Height alignment issue fixes
-- Date base fixes
+- Data base fixes
 
