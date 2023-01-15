@@ -16,7 +16,6 @@ Project members:
 - Dominykas Misius
 - Gabrielis Vaclovas Zabitis
 
-WIP project
 
 How to use:
 1) Download all the files <br>
@@ -25,5 +24,7 @@ How to use:
 2) Afterwards, run the program from the commandline. Use the commandprompts as seen in the console to navigate and use the program.
 3) In order to update the live fakekea site, you need to first update the local website, then you can update the fakekea website. You do need a password to update the website(:
 
-WIP:<br>
-- QOL fixes
+2023-01-15 update:
+- Height alignment issue fixes
+- Date base fixes
+
