@@ -67,7 +67,7 @@ void print_menu() {
         "1 - Create new item\n"
         "2 - Delete an item\n"
         "3 - Modify an item\n"
-        "4 - Update website\n"
+        "4 - Update local website\n"
         "5 - Print items\n"
         "6 - Open the local website\n"
         "7 - Open fakekea.ml\n"
@@ -98,6 +98,7 @@ void updateWebsite() {
     }
 
     fclose(fp2);
+    remove("update.bat");
     remove("validate.txt");
     free(text2);
 

@@ -27,7 +27,7 @@ void modify() {
     char *query = malloc(1000);
 
     for (;;) {
-        printf("Welcome to the product modifier! Enter the index of the product you'd like to modify (enter -1 if you'd like to go back): ");
+        printf("Welcome to the product modifier! Currently there are %d products. Enter the number of the product you'd like to modify (enter -1 if you'd like to go back): ", count);
         if (scanf("%d", &index) == 1 && getchar() == '\n') {
             if (index == -1) {
                 printf("Cancelling modification.\n\n");
@@ -265,7 +265,7 @@ void change_row(sqlite3 *db, int index) {
     int modify_row;
 
     for (;;) {
-        printf("Enter which row to modify (enter -1 if you want to go back): ");
+        printf("Enter which row to modify (enter -1 if you want to go back, currently there are %d rows): ", table_count);
         if (scanf("%d", &modify_row) == 1 && getchar() == '\n') {
             if (modify_row == -1) {
                 system("cls");
@@ -367,7 +367,7 @@ void delete_row(sqlite3 *db, int index) {
     }
     int delete_row;
 
-    printf("Enter which row you want to delete: (enter -1 if you want to go back): ");
+    printf("Enter which row you want to delete: (enter -1 if you want to go back, currently there are %d rows): ", table_count);
     for (;;) {
         if (scanf("%d", &delete_row) == 1 && getchar() == '\n') {
             if (delete_row == -1) {

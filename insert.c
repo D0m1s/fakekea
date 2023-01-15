@@ -73,12 +73,12 @@ void insert() {
     char *tableRight[10] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     for (int i = 0; i < tableCount; i++) {
-        printf("Enter value for the left side of the %d row: ", i);
+        printf("Enter value for the left side of the %d row: ", i+1);
         tableLeft[i] = calloc(101, 1);
         scanf("%100[^\n]", tableLeft[i]);
         finish_read();
 
-        printf("Enter value for the right side of the %d row: ", i);
+        printf("Enter value for the right side of the %d row: ", i+1);
         tableRight[i] = calloc(101, 1);
         scanf("%100[^\n]", tableRight[i]);
         finish_read();
