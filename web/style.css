@@ -54,9 +54,9 @@
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
   /* number of lines to show */
-  line-clamp: 5;
+  line-clamp: 4;
   -webkit-box-orient: vertical;
   letter-spacing: -0.3px;
   /*display: block;*/
