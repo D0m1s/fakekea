@@ -11,7 +11,7 @@
 ----------------------------------------
 
 Project members:
-- Dovydas Meskuotis
+- Dovydas Meškuotis
 - Aleksandras Bukelis
 - Dominykas Misius
 - Gabrielis Vaclovas Zabitis
